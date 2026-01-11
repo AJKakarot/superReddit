@@ -110,128 +110,88 @@ WORKER_POLLING_INTERVAL_MS=10000
 BATCH_SIZE=5
 
 # AWS
+
+### Architecture Goals
+- Reduce database load via batching and caching
+- Scale horizontally with traffic
+- Minimize operational overhead
+- Keep infrastructure costs predictable
+
+---
+
+## AWS Services Used
+
+### Compute
+- **Amazon ECS (Fargate)**
+  - Runs Node.js API service
+  - Runs optimized monitoring worker
+  - Auto-scaling based on CPU usage
+  - No EC2 instance management required
+
+---
+
+### Database
+- **Amazon RDS – PostgreSQL**
+  - Engine: PostgreSQL 14+
+  - Recommended instance: `db.t4g.medium`
+  - Optimized indexes and autovacuum settings applied
+  - Private subnet only (not publicly accessible)
+
+---
+
+### Networking
+- **Amazon VPC**
+  - Public subnets: Load balancer
+  - Private subnets: ECS services and RDS
+- **Security Groups**
+  - ALB → ECS: HTTP/HTTPS
+  - ECS → RDS: TCP 5432 only
+
+---
+
+### Load Balancing
+- **Application Load Balancer**
+  - HTTPS via ACM certificates
+  - Health checks on `/health`
+  - Routes traffic to ECS services
+
+---
+
+### CDN & Performance
+- **Amazon CloudFront**
+  - Serves frontend assets
+  - Reduces API traffic
+  - Improves global latency
+
+---
+
+### Secrets & Configuration
+- **AWS Secrets Manager**
+  - Database credentials
+  - API keys
+  - JWT secrets
+- Secrets injected into ECS at runtime
+
+---
+
+### Logging & Monitoring
+- **Amazon CloudWatch**
+  - ECS logs
+  - CPU and memory metrics
+  - RDS performance metrics
+  - Alarm-based alerting
+
+---
+
+## Environment Variables (Production)
+
+```env
+NODE_ENV=production
 AWS_REGION=us-east-1
-Deployment Steps
-1. Build Docker Images
-docker build -t reddit-api ./server
-docker build -t reddit-client ./client
 
-2. Push to Amazon ECR
-aws ecr create-repository --repository-name reddit-api
-aws ecr create-repository --repository-name reddit-client
+DATABASE_URL=postgresql://user:password@rds-endpoint:5432/dbname
 
-docker tag reddit-api:latest <ECR_URI>
-docker push <ECR_URI>
-
-3. Create ECS Services
-
-Create two services:
-
-reddit-api-service
-
-reddit-worker-service
-
-Enable:
-
-Auto scaling
-
-CPU-based scaling rules
-
-Health checks
-
-4. Provision PostgreSQL (RDS)
-
-Recommended:
-
-Engine: PostgreSQL 14+
-
-Instance: db.t4g.medium
-
-Run database optimizations after provisioning.
-
-5. Load Balancer Configuration
-
-HTTPS via ACM
-
-Route traffic to ECS
-
-Health check endpoint: /health
-
-Monitoring & Observability
-CloudWatch Metrics
-
-ECS CPU & memory
-
-RDS CPU utilization
-
-Error rates
-
-Task restarts
-
-Recommended Alarms
-
-DB CPU > 70%
-
-ECS CPU > 75%
-
-API error spikes
-
-Cost Optimization
-Estimated Monthly Cost (MVP)
-Service	Cost
-ECS (Fargate)	$30–60
-RDS PostgreSQL	$40–80
-Load Balancer	$18
-CloudFront	$5–15
-CloudWatch	$5
-Total	$100–180
-Security Best Practices
-
-Private subnets for database
-
-IAM roles (no hardcoded secrets)
-
-HTTPS everywhere
-
-Secrets Manager integration
-
-Least-privilege security groups
-
-Troubleshooting
-Cache Issues
-console.log(keywordCache.getHitRate());
-console.log(keywordCache.getSize());
-console.log(keywordCache.isCacheFresh());
-
-High CPU Persists
-ps aux | grep monitoring
-psql -c "\d+ keywords"
-
-Future Improvements
-
-Redis / ElastiCache
-
-Read replicas
-
-Query result caching
-
-Predictive scan scheduling
-
-Machine learning–based prioritization
-
-Conclusion
-
-This optimization and AWS deployment strategy delivers:
-
-✅ 60–80% database CPU reduction
-
-✅ Faster keyword loading
-
-✅ Lower infrastructure costs
-
-✅ Production-grade scalability
-
-✅ Easy rollback and maintenance
-
-The system is now efficient, scalable, and enterprise-ready.
-
+MONITORING_MODE=performance
+PRODUCER_INTERVAL_MINUTES=30
+WORKER_POLLING_INTERVAL_MS=10000
+BATCH_SIZE=5
