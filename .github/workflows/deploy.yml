@@ -1,0 +1,46 @@
+# .github/workflows/deploy.yml
+
+name: Deploy to EC2
+
+# Trigger this workflow on a push to the main branch
+on:
+  push:
+    branches:
+      - main
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy to Server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          # This script runs on your EC2 instance
+          # Navigate to the root of the project
+          cd Supereddit
+
+          # Pull the latest changes from the main branch
+          git pull origin main
+
+          # Navigate to the server directory
+          cd server
+
+          # Install dependencies
+          npm install
+
+          # Build the TypeScript project
+          npm run build
+
+          # Reload the application with PM2 for zero-downtime deployment
+          pm2 reload supereddit-api

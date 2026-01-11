@@ -1,0 +1,176 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  CLIENT_USER
+}
+
+enum PostStatus {
+  Draft
+  Scheduled
+  Posted
+  Error
+}
+
+enum Plan {
+  FREE
+  PRO
+  LIFETIME
+}
+
+model Client {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users           User[]
+  redditAccounts  RedditAccount[]
+  posts           Post[]
+  keywords        Keyword[]
+  mentions        Mention[]
+
+  @@map("clients")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(CLIENT_USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  client   Client @relation(fields: [clientId], references: [id])
+  clientId String
+
+  posts         Post[]
+
+  // --- ADD THESE FIELDS ---
+  plan           Plan    @default(FREE)
+  dodoCustomerId String? @unique // Links our user to their Dodo Payments customer profile
+  // --- END ADD ---
+
+  @@map("users")
+}
+
+model RedditAccount {
+  id                String    @id @default(cuid())
+  reddit_username   String
+  access_token      String    // Encrypted
+  refresh_token     String    // Encrypted
+  token_expires_at  DateTime
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  client   Client @relation(fields: [clientId], references: [id])
+  clientId String
+
+  posts Post[]
+
+  @@map("reddit_accounts")
+}
+
+model Post {
+  id              String     @id @default(cuid())
+  title           String
+  body            String
+  subreddit       String
+  status          PostStatus @default(Draft)
+  scheduled_at    DateTime?
+  posted_at       DateTime?
+  reddit_post_id  String?
+  error_message   String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  // --- PHASE 3 ADDITIONS ---
+  source_url            String?    // Full URL to the Reddit post
+  current_upvotes       Int?       // Cached upvote count
+  current_comments      Int?       // Cached comment count
+  analytics_last_updated DateTime? // Timestamp of the last analytics update
+  // --- END PHASE 3 ADDITIONS ---
+  
+  author   User @relation(fields: [authorId], references: [id])
+  authorId String
+
+  client   Client @relation(fields: [clientId], references: [id])
+  clientId String
+
+  redditAccount   RedditAccount? @relation(fields: [redditAccountId], references: [id])
+  redditAccountId String?
+
+  postAnalytics   PostAnalytics[]
+
+  @@index([clientId, status]) // For filtering posts by client and status
+  @@map("posts")
+}
+
+// --- Monitoring & Analytics Additions ---
+enum Sentiment {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+  UNKNOWN
+}
+
+model Keyword {
+  id            String    @id @default(cuid())
+  term          String
+  is_active     Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  lastScannedAt DateTime?
+  nextScanAt    DateTime? @default(now()) // <-- ADD THIS LINE to schedule the next scan
+  client        Client    @relation(fields: [clientId], references: [id])
+  clientId      String
+  mentions      Mention[]
+
+  @@unique([term, clientId])
+  @@index([nextScanAt]) 
+  @@map("keywords")
+}
+
+
+model Mention {
+  id            String    @id @default(cuid())
+  source_url    String    @unique
+  content_snippet String  @db.Text
+  author        String
+  subreddit     String
+  sentiment     Sentiment @default(UNKNOWN)
+  found_at      DateTime
+  keyword       Keyword   @relation(fields: [keywordId], references: [id], onDelete: Cascade)
+  keywordId     String
+  client        Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId      String
+
+  @@index([clientId, found_at]) // For fetching and sorting mentions for a client
+  @@map("mentions")
+}
+
+
+
+model PostAnalytics {
+  id        String   @id @default(cuid())
+  postId    String
+  upvotes   Int
+  comments  Int
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+}
+
+model Waitlist {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,10 @@
+# Bento Grid UI & Animation Guidelines
+
+- The bento grid section is implemented in [page.tsx](mdc:client/src/app/page.tsx) and styled in [globals.css](mdc:client/src/app/globals.css).
+- Use a clean, professional layout with ample white space and subtle slate backgrounds.
+- Minimize the use of orange; use it only for accents or highlights, not as a dominant background.
+- Ensure the grid is fully responsive: use `sm`, `md`, and `col-span` classes to adapt to all screen sizes.
+- Card backgrounds should be white or light slate, with soft borders and shadows for separation.
+- Animations should be subtle: use gentle fade/slide-in for entrance and light hover elevation.
+- Typography and spacing should match the hero section for a cohesive look.
+- Avoid visual clutter and keep the interface modern and easy to scan.

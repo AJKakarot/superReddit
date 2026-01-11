@@ -1,0 +1,190 @@
+# Reddit MVP - Complete Feature Context
+
+## Core MVP Features
+
+### A. AI Reddit Post Writing
+**Purpose**: Generate high-quality Reddit posts using AI
+**Frontend Requirements**:
+- **Post Creation Form**:
+  - Keyword/topic input field
+  - Tone selector (Story, Question, Experience)
+  - Subreddit selection dropdown
+  - Character count validation (50-4000 chars)
+  - Preview mode for generated content
+- **AI Generation Interface**:
+  - "Generate Post" button with loading state
+  - Real-time generation progress
+  - Edit capabilities for generated content
+  - Save as draft functionality
+- **Content Management**:
+  - Title and body pre-filled from AI
+  - Rich text editor for manual edits
+  - Character count display
+  - Subreddit-specific formatting hints
+
+### B. Smart Post Scheduler
+**Purpose**: Schedule posts with calendar interface
+**Frontend Requirements**:
+- **Calendar Interface**:
+  - Monthly/weekly view toggle
+  - Drag-and-drop post scheduling
+  - Time slot selection (hour/minute)
+  - Subreddit-specific scheduling rules
+- **Post Status Management**:
+  - Visual status indicators (Draft, Scheduled, Posted)
+  - Color-coded status system
+  - Bulk status updates
+  - Status change history
+- **Scheduling Features**:
+  - Recurring post options
+  - Timezone handling
+  - Conflict detection
+  - Schedule preview
+
+### C. Keyword Tracking
+**Purpose**: Monitor Reddit for brand/competitor mentions
+**Frontend Requirements**:
+- **Keyword Management**:
+  - Add/edit keyword lists
+  - Category organization (Brand, Competitor, Trend)
+  - Sentiment tagging (Positive, Neutral, Negative)
+  - Keyword priority levels
+- **Real-time Dashboard**:
+  - Live mention feed
+  - Push notification system
+  - Mention count metrics
+  - Sentiment distribution charts
+- **Alert System**:
+  - Customizable alert thresholds
+  - Email/push notification settings
+  - Alert history log
+  - Mute/unmute functionality
+
+### D. Engagement Coordination
+**Purpose**: Track and manage post engagement activities
+**Frontend Requirements**:
+- **Engagement Dashboard**:
+  - Post performance tracking
+  - Engagement metrics visualization
+  - Activity timeline
+  - Performance analytics
+- **Analytics Features**:
+  - Engagement rate tracking
+  - Historical activity graphs
+  - Export functionality
+  - Real-time updates
+
+### E. Client Dashboard
+**Purpose**: Secure client access with analytics
+**Frontend Requirements**:
+- **Authentication**:
+  - Client login system
+  - Role-based access (ADMIN, CLIENT_USER)
+  - Session management
+  - Password reset functionality
+- **Visual Calendar**:
+  - Interactive calendar view
+  - Post timeline visualization
+  - Upcoming/past post indicators
+  - Click-to-edit functionality
+- **Analytics Dashboard**:
+  - Post performance metrics
+  - Engagement tracking
+  - Keyword mention summaries
+  - Read-only data presentation
+- **Comment Management**:
+  - Comment visibility toggles
+  - Comment moderation tools
+  - Comment analytics
+  - Response tracking
+
+### F. Reporting & Analytics
+**Purpose**: Comprehensive performance reporting
+**Frontend Requirements**:
+- **Performance Metrics**:
+  - Post views and upvotes
+  - Click-through rates (CTR)
+  - Engagement graphs
+  - Comparative analytics
+- **Comment Analytics**:
+  - Comments per post tracking
+  - Engagement depth analysis
+  - Comment sentiment tracking
+  - Response rate metrics
+- **Keyword Reports**:
+  - Trigger log visualization
+  - Mention frequency charts
+  - Sentiment analysis graphs
+  - Trend identification
+- **Export Features**:
+  - PDF report generation
+  - Custom date range selection
+  - Client-specific reports
+  - Automated report scheduling
+
+## Technical Implementation
+
+### Frontend Architecture
+- **Framework**: Next.js 15 with App Router
+- **Styling**: Tailwind CSS with custom design system
+- **State Management**: React hooks and context
+- **API Integration**: RESTful API calls to backend
+- **Real-time**: WebSocket connections for live updates
+
+### Key Frontend Components Needed
+1. **Dashboard Layout**: Main client dashboard with navigation
+2. **Post Creator**: AI-powered post generation interface
+3. **Calendar Scheduler**: Interactive calendar for post scheduling
+4. **Keyword Tracker**: Real-time keyword monitoring interface
+5. **Analytics Charts**: Performance visualization components
+6. **Activity Logger**: Command and action tracking interface
+7. **Report Generator**: PDF export functionality
+8. **Notification System**: Real-time alerts and notifications
+
+### API Integration Points
+- **Authentication**: JWT-based auth with role management
+- **Post Management**: CRUD operations for posts
+- **AI Generation**: LangChain/Gemini integration
+- **Scheduling**: Automated post scheduling system
+- **Keyword Monitoring**: Real-time mention tracking
+- **Analytics**: Performance data aggregation
+- **Reporting**: PDF generation and export
+
+### Database Schema Integration
+- **Client**: Multi-tenant client management
+- **User**: Role-based user accounts
+- **RedditAccount**: OAuth token management
+- **Post**: Post content and scheduling
+- **Keyword**: Monitoring configuration
+- **Activity**: Command and action logs
+- **Analytics**: Performance metrics storage
+
+### Security & Performance
+- **Authentication**: Secure JWT implementation
+- **Data Encryption**: OAuth token encryption
+- **CORS**: Proper frontend-backend communication
+- **Rate Limiting**: API protection
+- **Caching**: Performance optimization
+- **Real-time Updates**: WebSocket connections
+
+## Development Priorities
+1. **Core Authentication**: Client login and role management
+2. **Post Creation**: AI-powered post generation
+3. **Scheduling System**: Calendar interface and automation
+4. **Dashboard**: Main client interface
+5. **Analytics**: Performance tracking and reporting
+6. **Keyword Monitoring**: Real-time mention tracking
+7. **Engagement Tools**: Engagement coordination and analytics
+8. **Reporting**: PDF export and analytics
+
+## Environment Configuration
+- **Frontend Port**: 5173 (configured)
+- **Backend Port**: 3000
+- **Database**: PostgreSQL with Prisma
+- **AI Service**: Google Gemini via LangChain
+- **OAuth**: Reddit API integration
+- **File Storage**: For PDF reports and exports
+description:
+globs:
+alwaysApply: false
+---

@@ -1,0 +1,14 @@
+# Font Usage Rule
+
+Always use 'Plus Jakarta Sans' as the primary font for all UI components and pages. The font is imported in [globals.css](mdc:client/src/app/globals.css) and should be referenced in all custom styles and inline style overrides as needed.
+
+Example usage:
+```css
+font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, ...;
+```
+
+If you need to add or override font styles in components, ensure 'Plus Jakarta Sans' is used for consistency and a modern look.
+description:
+globs:
+alwaysApply: false
+---

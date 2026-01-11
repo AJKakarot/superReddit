@@ -1,0 +1,68 @@
+# Backend Development Standards
+
+## Technology Stack
+- **Framework**: Express.js with TypeScript
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: JWT tokens with bcrypt
+- **AI Integration**: LangChain with Google Gemini
+- **Scheduling**: node-cron for automated posting
+
+## API Structure
+
+### Controllers
+- [auth.controller.ts](mdc:server/src/controllers/auth.controller.ts) - Authentication logic
+- [post.controller.ts](mdc:server/src/controllers/post.controller.ts) - Post management
+- [ai.controller.ts](mdc:server/src/controllers/ai.controller.ts) - AI post generation
+
+### Routes
+- [auth.routes.ts](mdc:server/src/routes/auth.routes.ts) - Auth endpoints
+- [post.routes.ts](mdc:server/src/routes/post.routes.ts) - Post endpoints  
+- [ai.routes.ts](mdc:server/src/routes/ai.routes.ts) - AI endpoints
+
+### Services
+- [scheduler.service.ts](mdc:server/src/services/scheduler.service.ts) - Automated posting
+- [encryption.service.ts](mdc:server/src/services/encryption.service.ts) - Token encryption
+
+## Database Schema
+- **Client**: Multi-tenant architecture
+- **User**: Role-based access (ADMIN, CLIENT_USER)
+- **RedditAccount**: OAuth token storage (encrypted)
+- **Post**: Status tracking (Draft, Scheduled, Posted, Error)
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `POST /api/auth/reddit/oauth/callback` - Reddit OAuth callback
+
+### Posts
+- `GET /api/posts` - List posts
+- `POST /api/posts` - Create post
+- `PUT /api/posts/:id` - Update post
+- `DELETE /api/posts/:id` - Delete post
+
+### AI
+- `POST /api/ai/generate` - Generate post content
+
+## Development Workflow
+- Run `npm run dev` for development with nodemon
+- Use `npm run db:studio` to open Prisma Studio
+- Use `npm run db:push` for schema changes
+- Use `npm run db:migrate` for database migrations
+
+## Environment Variables
+- `DATABASE_URL` - PostgreSQL connection
+- `JWT_SECRET` - JWT signing secret
+- `GEMINI_API_KEY` - Google AI API key
+- `FRONTEND_URL` - CORS origin (default: http://localhost:5173)
+
+## Error Handling
+- Global error handler in [index.ts](mdc:server/src/index.ts)
+- Proper HTTP status codes
+- Structured error responses
+- Graceful shutdown handling
+description:
+globs:
+alwaysApply: false
+---

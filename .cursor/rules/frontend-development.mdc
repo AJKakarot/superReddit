@@ -1,0 +1,50 @@
+# Frontend Development Standards
+
+## Technology Stack
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS with custom design system
+- **Icons**: Lucide React
+- **Code Quality**: Biome for formatting, ESLint for linting
+
+## Coding Standards
+
+### TypeScript
+- Use ES6+ syntax (arrow functions, const/let, destructuring)
+- Prefer functional components with hooks
+- Use proper TypeScript types and interfaces
+- Import/export using ES6 module syntax
+
+### Styling
+- Use Tailwind CSS utility classes
+- Leverage the custom design system in [tailwind.config.ts](mdc:client/tailwind.config.ts)
+- Use `cn()` utility from [utils.ts](mdc:client/src/lib/utils.ts) for conditional classes
+- Follow the design patterns from [page.tsx](mdc:client/src/app/page.tsx)
+
+### Component Structure
+- Use "use client" directive for client components
+- Keep components focused and reusable
+- Use proper TypeScript props interfaces
+- Follow Next.js 13+ App Router conventions
+
+### File Organization
+- Components in `src/app/` for page components
+- Utilities in `src/lib/` for shared functions
+- Global styles in [globals.css](mdc:client/src/app/globals.css)
+
+## Development Workflow
+- Run `npm run dev` to start development server on port 5173
+- Use `npm run lint` for code linting
+- Use `npm run format` for code formatting with Biome
+- Hot reload is enabled with Turbopack
+
+## Key Dependencies
+- Next.js 15.3.2
+- React 18.3.1
+- Tailwind CSS 3.4.17
+- Lucide React for icons
+- Class Variance Authority for component variants
+description:
+globs:
+alwaysApply: false
+---

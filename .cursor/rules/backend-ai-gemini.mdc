@@ -1,0 +1,11 @@
+# Backend AI Integration Rule
+
+- The AI endpoints in the backend use LangChain with Gemini (Google Generative AI) for generating Reddit post drafts.
+- The Gemini model is initialized with the environment variable `GEMINI_API_KEY` and uses the `gemini-2.5-flash` or `gemini-pro` model.
+- The prompt for post generation requires the body to be at least 100 words and under 4000 characters.
+- The backend enforces a validation rule: generated post bodies must be between 50 and 4000 characters in length.
+- If the generated body is outside this range, the API returns an error.
+description:
+globs:
+alwaysApply: false
+---

@@ -1,0 +1,47 @@
+# Reddit MVP Project Structure
+
+This is a full-stack Reddit automation MVP with AI-powered post generation.
+
+## Project Architecture
+
+### Frontend (Next.js + TypeScript + Tailwind)
+- **Location**: `client/` directory
+- **Framework**: Next.js 15 with App Router
+- **Styling**: Tailwind CSS with custom design system
+- **Port**: Runs on port 5173 (configured in [package.json](mdc:client/package.json))
+- **Key Files**:
+  - [src/app/page.tsx](mdc:client/src/app/page.tsx) - Main landing page
+  - [src/app/layout.tsx](mdc:client/src/app/layout.tsx) - Root layout
+  - [src/lib/utils.ts](mdc:client/src/lib/utils.ts) - Utility functions
+
+### Backend (Express + TypeScript + Prisma)
+- **Location**: `server/` directory  
+- **Framework**: Express.js with TypeScript
+- **Database**: PostgreSQL with Prisma ORM
+- **Port**: Runs on port 3000 by default
+- **Key Files**:
+  - [src/index.ts](mdc:server/src/index.ts) - Server entry point
+  - [prisma/schema.prisma](mdc:server/prisma/schema.prisma) - Database schema
+  - [src/controllers/](mdc:server/src/controllers/) - API controllers
+  - [src/routes/](mdc:server/src/routes/) - API routes
+  - [src/services/](mdc:server/src/services/) - Business logic
+
+## Database Models
+- **Client**: Multi-tenant client management
+- **User**: User accounts with roles (ADMIN, CLIENT_USER)
+- **RedditAccount**: OAuth tokens for Reddit API access
+- **Post**: Reddit posts with status tracking (Draft, Scheduled, Posted, Error)
+
+## API Endpoints
+- `/api/auth` - Authentication routes
+- `/api/posts` - Post management
+- `/api/ai` - AI-powered post generation
+
+## Development Commands
+- Frontend: `cd client && npm run dev`
+- Backend: `cd server && npm run dev`
+- Database: `cd server && npm run db:studio`
+description:
+globs:
+alwaysApply: false
+---

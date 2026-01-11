@@ -1,0 +1,43 @@
+# Authentication & OAuth Flow
+
+## Current Implementation Status
+
+### Reddit OAuth Flow
+- **Issue**: OAuth callback flow is not fully functional
+- **Problem**: Backend expects JWT token in `/api/auth/reddit/oauth/callback`, but Reddit redirects don't include it
+- **Solution Needed**: Redirect to frontend first, capture the code, then call backend with JWT token in Authorization header
+
+### Authentication Architecture
+- **JWT Tokens**: Used for session management
+- **Role-based Access**: ADMIN and CLIENT_USER roles
+- **Multi-tenant**: Users belong to clients
+- **Token Encryption**: Reddit OAuth tokens are encrypted before storage
+
+## Key Files
+- [auth.controller.ts](mdc:server/src/controllers/auth.controller.ts) - Authentication logic
+- [auth.routes.ts](mdc:server/src/routes/auth.routes.ts) - Auth endpoints
+- [auth.middleware.ts](mdc:server/src/middleware/auth.middleware.ts) - JWT verification
+- [encryption.service.ts](mdc:server/src/services/encryption.service.ts) - Token encryption
+
+## OAuth Flow Fix Required
+1. Frontend should handle Reddit OAuth redirect
+2. Capture authorization code from URL parameters
+3. Send code to backend with JWT token in Authorization header
+4. Backend exchanges code for access token
+5. Store encrypted tokens in database
+
+## Security Considerations
+- OAuth tokens are encrypted using [encryption.service.ts](mdc:server/src/services/encryption.service.ts)
+- JWT tokens have expiration
+- Passwords are hashed with bcrypt
+- CORS is configured for frontend origin
+
+## Environment Variables
+- `JWT_SECRET` - Required for JWT signing
+- `REDDIT_CLIENT_ID` - Reddit OAuth app ID
+- `REDDIT_CLIENT_SECRET` - Reddit OAuth app secret
+- `REDDIT_REDIRECT_URI` - OAuth callback URL
+description:
+globs:
+alwaysApply: false
+---

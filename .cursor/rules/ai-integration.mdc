@@ -1,0 +1,44 @@
+# AI Integration & Post Generation
+
+## AI Technology Stack
+- **LangChain**: Framework for AI application development
+- **Google Gemini**: Primary AI model (gemini-2.5-flash or gemini-pro)
+- **Environment**: Requires `GEMINI_API_KEY` environment variable
+
+## Implementation Details
+
+### AI Controller
+- [ai.controller.ts](mdc:server/src/controllers/ai.controller.ts) - Handles AI post generation
+- [ai.routes.ts](mdc:server/src/routes/ai.routes.ts) - AI API endpoints
+
+### Post Generation Process
+1. **Input Validation**: Post body must be 100+ words and under 4000 characters
+2. **AI Generation**: Uses LangChain with Gemini model
+3. **Output Validation**: Generated content must be 50-4000 characters
+4. **Error Handling**: Returns error if content is outside valid range
+
+### API Endpoint
+- `POST /api/ai/generate` - Generate Reddit post content
+- **Request Body**: Should include topic, subreddit, tone, etc.
+- **Response**: Generated post title and body
+
+## Content Requirements
+- **Minimum Length**: 100 words for generation prompt
+- **Maximum Length**: 4000 characters for generated content
+- **Validation**: Backend enforces 50-4000 character range
+- **Error Response**: Returns error if content is outside valid range
+
+## Integration Points
+- **Post Creation**: AI-generated content can be saved as drafts
+- **Scheduling**: Posts can be scheduled for automated posting
+- **Status Tracking**: Posts have status (Draft, Scheduled, Posted, Error)
+
+## Development Notes
+- AI service is initialized with environment variable `GEMINI_API_KEY`
+- Uses `gemini-2.5-flash` or `gemini-pro` model variants
+- Content validation happens both at generation and storage levels
+- Error handling includes specific validation error messages
+description:
+globs:
+alwaysApply: false
+---
